@@ -1,4 +1,4 @@
-﻿# Source
+# Source
 
 Placeholder directory for the planned Vite, React, and TypeScript demo wallet source.
 

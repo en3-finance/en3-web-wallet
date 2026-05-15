@@ -1,4 +1,4 @@
-﻿# Architecture
+# Architecture
 
 The web wallet demo is planned as a Vite, React, and TypeScript application that demonstrates wallet interface flows through public, documented boundaries.
 

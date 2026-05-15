@@ -1,4 +1,4 @@
-﻿# Demo Scope
+# Demo Scope
 
 The web wallet repository is a public demo surface.
 

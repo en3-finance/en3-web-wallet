@@ -1,4 +1,4 @@
-﻿# en3-web-wallet
+# en3-web-wallet
 
 Public demo web wallet for EVM-compatible networks, designed to demonstrate en3 wallet infrastructure interfaces for financial institutions.
 

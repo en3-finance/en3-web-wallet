@@ -1,4 +1,4 @@
-﻿# Web Security Notes
+# Web Security Notes
 
 The web wallet repository is a public demo interface, not production custody infrastructure.
 

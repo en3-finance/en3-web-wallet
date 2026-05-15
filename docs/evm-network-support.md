@@ -1,4 +1,4 @@
-﻿# EVM Network Support
+# EVM Network Support
 
 The web wallet demo is intended to support EVM-compatible network configuration through documented public boundaries.
 
