@@ -1,67 +1,42 @@
-# en3-web-wallet
+# En3 Web Wallet
 
-Public demo web wallet for EVM-compatible networks, designed to demonstrate en3 wallet infrastructure interfaces for financial institutions.
+Status: public reference / sandbox artifact. This repository is intended to document and demonstrate the En3 integration surface. Production cryptography, signing orchestration, policy enforcement, risk logic, ledger infrastructure, treasury execution, and customer deployments are private by design.
 
-Status: Early public preview
+## What This Repo Is
 
-## Overview
+`en3-web-wallet` is a white-label web wallet reference app for banks, fintechs, and digital-asset payment products using En3 APIs.
 
-This repository will contain the public demo web wallet surface for en3. It is intended to demonstrate browser-based wallet interface flows, EVM-compatible network configuration, and documented platform API boundaries.
+## Who It Is For
 
-## Planned Stack
+This repo is for product, engineering, and diligence teams that need to understand browser-based wallet flows for an En3-powered product.
 
-The planned stack is:
+## What It Demonstrates
 
-- Vite.
-- React.
-- TypeScript.
-- viem/wagmi or equivalent EVM tooling.
-- EVM-compatible chain configuration.
-- Demo mode.
-- Integration with en3 platform APIs through documented boundaries.
+- Account overview.
+- Wallet balance.
+- Deposit address display.
+- Send stablecoin flow.
+- Transaction status.
+- Risk and approval states.
+- Support and recovery states.
+- "Powered by En3 API" architecture.
 
-No production web wallet code has been added yet.
+## Intentionally Out Of Scope
 
-## What This Repository Contains
+This repo does not contain production signing, wallet custody, policy enforcement, risk logic, ledger infrastructure, treasury execution, real customer data, private endpoints, or production deployment material.
 
-- Public demo web wallet documentation.
-- Source placeholder structure.
-- Web security notes.
-- EVM network support notes.
-- Demo scope and roadmap.
+## Reference Docs
 
-## What This Repository Does Not Contain
+- [Reference flow](docs/reference-flow.md)
+- [Screens](docs/screens.md)
+- [App skeleton](apps/web-wallet/README.md)
 
-- Production MPC.
-- Real custody backend.
-- Compliance engine.
-- Country-specific policy logic.
-- Production customer deployments.
-- Private policies.
-- Backend secrets.
-- Production endpoints.
+## Related En3 Repositories
 
-## Enterprise Wallet Infrastructure Context
-
-The web wallet is a demo interface for the broader en3 enterprise wallet infrastructure stack. Production custody, signing, compliance, policy, and release operations remain private.
-
-## Public Demo And Integration Boundary
-
-The public demo should use placeholders and documented API boundaries. It is not the proprietary production custody layer.
-
-## Security And Custody Boundary
-
-Browser wallet demos must not contain seed phrases, production keys, production custody logic, sensitive customer data, backend secrets, or private compliance material.
-
-## Roadmap
-
-- Add a Vite, React, and TypeScript scaffold.
-- Add demo network selection.
-- Add demo transaction review flow.
-- Add documented platform API boundary examples.
-- Add browser security checklist.
-
-## Contact
-
-Website: https://en3.finance
-
+- `en3-docs`
+- `en3-api-spec`
+- `en3-wallet-sdk`
+- `en3-admin-console`
+- `en3-reference-bank`
+- `en3-mobile-wallet`
+- `en3-chain-integrations`

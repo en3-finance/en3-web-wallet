@@ -1,0 +1,13 @@
+{
+  "userId": "user_001",
+  "walletId": "wallet_001",
+  "balances": [
+    {
+      "asset": "USDC",
+      "network": "base-sepolia",
+      "available": "25000.00",
+      "pending": "12500.00"
+    }
+  ],
+  "approvalState": "transaction_requires_approval"
+}
