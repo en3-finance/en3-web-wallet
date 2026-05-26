@@ -18,7 +18,7 @@ Status: public reference / sandbox artifact. This repository is intended to docu
 - `npm install`
 - `npm test` - 1 file, 4 tests passed
 - `npm run build`
-- Deprecated event scan reviewed; no old internal event names or `mock_signed` remain in runtime app/mock files.
+- Deprecated event scan reviewed; no old internal event names or legacy mock-signing tokens remain in runtime app/mock files.
 - Secret scan reviewed; matches are public boundary text and validator terms only, not credentials.
 
 ## Branch
