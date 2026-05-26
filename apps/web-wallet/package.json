@@ -1,0 +1,12 @@
+{
+  "name": "@en3/web-wallet-reference",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "White-label En3 web wallet reference app using mock sandbox data.",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc -p tsconfig.json && vite build",
+    "test": "vitest run"
+  }
+}

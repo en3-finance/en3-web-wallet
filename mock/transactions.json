@@ -1,10 +1,50 @@
 [
   {
-    "id": "txn_001",
+    "id": "txn_demo_004",
+    "direction": "outgoing",
     "asset": "USDC",
     "amount": "12500.00",
-    "network": "base-sepolia",
+    "network": "Base Sepolia sandbox",
     "status": "requires_approval",
-    "createdAt": "2026-05-25T12:00:00Z"
+    "counterparty": "Lagos Partner Payouts",
+    "createdAt": "2026-05-25T12:00:00Z",
+    "updatedAt": "2026-05-25T12:03:00Z",
+    "description": "Outgoing payment is waiting for sandbox operations approval."
+  },
+  {
+    "id": "txn_demo_003",
+    "direction": "incoming",
+    "asset": "USDC",
+    "amount": "8000.00",
+    "network": "Base Sepolia sandbox",
+    "status": "settled",
+    "counterparty": "Sandbox deposit address",
+    "createdAt": "2026-05-24T09:20:00Z",
+    "updatedAt": "2026-05-24T09:26:00Z",
+    "description": "Mock deposit credited to the payment account."
+  },
+  {
+    "id": "txn_demo_002",
+    "direction": "outgoing",
+    "asset": "USDC",
+    "amount": "3200.00",
+    "network": "Base Sepolia sandbox",
+    "status": "settled",
+    "counterparty": "Demo merchant settlement",
+    "createdAt": "2026-05-23T15:45:00Z",
+    "updatedAt": "2026-05-23T16:05:00Z",
+    "description": "Mock merchant settlement completed in the reference timeline."
+  },
+  {
+    "id": "txn_demo_001",
+    "direction": "outgoing",
+    "asset": "USDC",
+    "amount": "900.00",
+    "network": "Base Sepolia sandbox",
+    "status": "simulation_failed",
+    "counterparty": "Incomplete beneficiary profile",
+    "createdAt": "2026-05-22T11:30:00Z",
+    "updatedAt": "2026-05-22T11:32:00Z",
+    "description": "Sandbox simulation stopped because beneficiary data was incomplete."
   }
 ]

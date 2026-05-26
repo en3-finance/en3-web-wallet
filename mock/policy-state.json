@@ -1,0 +1,90 @@
+{
+  "policyId": "policy_demo_001",
+  "policyName": "Sandbox payment approval policy",
+  "riskLevel": "medium_review",
+  "approvalState": "operations_approval_required",
+  "approverRole": "Payments operations reviewer",
+  "paymentDraft": {
+    "id": "pay_demo_001",
+    "recipientName": "Lagos Partner Payouts",
+    "destinationAddress": "en3_sandbox_recipient_usdc_789",
+    "amount": "12500.00",
+    "asset": "USDC",
+    "network": "Base Sepolia sandbox",
+    "memo": "Reference payout batch for partner review",
+    "estimatedFee": "17.50",
+    "settlementEstimate": "Mock settlement window: 10-20 minutes after approval"
+  },
+  "simulation": {
+    "id": "sim_demo_001",
+    "status": "requires_approval",
+    "summary": "Sandbox simulation passed balance checks and routed the payment to operations approval.",
+    "nextStep": "A payments operations reviewer approves or rejects this mock payment before it can continue in the reference flow.",
+    "checks": [
+      {
+        "name": "Available balance",
+        "status": "passed",
+        "detail": "Mock balance covers amount and estimated fee."
+      },
+      {
+        "name": "Payment policy",
+        "status": "review_required",
+        "detail": "Amount exceeds the demo threshold for automatic approval."
+      },
+      {
+        "name": "Address-risk interface",
+        "status": "mock_review",
+        "detail": "Reference-only interface state; no external vendor is connected."
+      }
+    ]
+  },
+  "auditTrail": [
+    {
+      "id": "audit_demo_003",
+      "timestamp": "2026-05-25T12:03:00Z",
+      "actor": "Policy engine reference",
+      "action": "Routed payment to operations approval"
+    },
+    {
+      "id": "audit_demo_002",
+      "timestamp": "2026-05-25T12:01:00Z",
+      "actor": "Simulation reference",
+      "action": "Checked balance, policy, and address-risk interface state"
+    },
+    {
+      "id": "audit_demo_001",
+      "timestamp": "2026-05-25T12:00:00Z",
+      "actor": "Demo operator",
+      "action": "Created outgoing payment draft"
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_demo_004",
+      "type": "payment.approval_required",
+      "timestamp": "2026-05-25T12:03:00Z",
+      "summary": "Webhook-style event indicating the mock payment requires operations approval.",
+      "relatedTransactionId": "txn_demo_004"
+    },
+    {
+      "id": "evt_demo_003",
+      "type": "payment.simulation_completed",
+      "timestamp": "2026-05-25T12:01:00Z",
+      "summary": "Simulation completed with a review-required result.",
+      "relatedTransactionId": "txn_demo_004"
+    },
+    {
+      "id": "evt_demo_002",
+      "type": "deposit.settled",
+      "timestamp": "2026-05-24T09:26:00Z",
+      "summary": "Mock deposit settlement event credited to the account.",
+      "relatedTransactionId": "txn_demo_003"
+    },
+    {
+      "id": "evt_demo_001",
+      "type": "account.recovery_contact_verified",
+      "timestamp": "2026-05-21T08:00:00Z",
+      "summary": "Support state updated after a recovery contact verification event."
+    }
+  ]
+}

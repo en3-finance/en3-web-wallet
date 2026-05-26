@@ -1,0 +1,10 @@
+{
+  "id": "demo_user_001",
+  "name": "Amina Farouk",
+  "customerType": "SMB payout operator",
+  "programName": "North Harbor Pay",
+  "accountStatus": "Active sandbox account",
+  "supportState": "Recovery contact verified",
+  "supportSummary": "Support can review account access and payment status. No seed phrases, private keys, or custody operations are exposed in this public demo.",
+  "relationshipManager": "Demo Partner Success Team"
+}
