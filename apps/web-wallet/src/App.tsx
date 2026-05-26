@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import policyStateData from "../../../mock/policy-state.json";
 import transactionsData from "../../../mock/transactions.json";
 import userData from "../../../mock/user.json";
@@ -61,7 +61,9 @@ type SimulationCheck = {
   detail: string;
 };
 
-type AuditEvent = {
+declare const __EN3_API_BASE_URL__: string;
+
+type ApprovalNote = {
   id: string;
   timestamp: string;
   actor: string;
@@ -90,7 +92,7 @@ type PolicyState = {
     nextStep: string;
     checks: SimulationCheck[];
   };
-  auditTrail: AuditEvent[];
+  approvalNotes: ApprovalNote[];
   events: WebhookEvent[];
 };
 
@@ -112,19 +114,68 @@ const wallet = walletStateData as WalletState;
 const policy = policyStateData as PolicyState;
 const transactions = transactionsData as Transaction[];
 
+type SandBankSnapshot = {
+  customer: DemoCustomer;
+  wallet: WalletState;
+  policy: PolicyState;
+  transactions: Transaction[];
+};
+
+const mockSnapshot: SandBankSnapshot = {
+  customer,
+  wallet,
+  policy,
+  transactions
+};
+
 function App() {
   const [copied, setCopied] = useState(false);
-  const primaryBalance = wallet.balances[0];
-  const orderedTransactions = useMemo(() => sortByNewest(transactions), []);
-  const orderedEvents = useMemo(() => sortByNewest(policy.events), []);
-  const orderedAuditTrail = useMemo(() => sortByNewest(policy.auditTrail.map((event) => ({
+  const [snapshot, setSnapshot] = useState<SandBankSnapshot>(mockSnapshot);
+  const [dataMode, setDataMode] = useState<"mock" | "sandbox-api" | "sandbox-api-fallback">("mock");
+  const primaryBalance = snapshot.wallet.balances[0];
+  const orderedTransactions = useMemo(() => sortByNewest(snapshot.transactions), [snapshot.transactions]);
+  const orderedEvents = useMemo(() => sortByNewest(snapshot.policy.events), [snapshot.policy.events]);
+  const orderedApprovalNotes = useMemo(() => sortByNewest(snapshot.policy.approvalNotes.map((event) => ({
     ...event,
     createdAt: event.timestamp
-  }))), []);
+  }))), [snapshot.policy.approvalNotes]);
+
+  useEffect(() => {
+    const apiBaseUrl = __EN3_API_BASE_URL__.trim();
+
+    if (!apiBaseUrl) {
+      return;
+    }
+
+    const controller = new AbortController();
+
+    fetch(`${apiBaseUrl.replace(/\/$/, "")}/sandbank-demo`, {
+      signal: controller.signal,
+      headers: { Accept: "application/json" }
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Sandbox API returned ${response.status}`);
+        }
+
+        return response.json() as Promise<SandBankSnapshot>;
+      })
+      .then((nextSnapshot) => {
+        setSnapshot(nextSnapshot);
+        setDataMode("sandbox-api");
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) {
+          setDataMode("sandbox-api-fallback");
+        }
+      });
+
+    return () => controller.abort();
+  }, []);
 
   async function copyDepositAddress() {
     try {
-      await navigator.clipboard?.writeText(wallet.depositAddress);
+      await navigator.clipboard?.writeText(snapshot.wallet.depositAddress);
     } catch {
       // Clipboard access is optional in local demos.
     }
@@ -138,40 +189,49 @@ function App() {
       <header className="topbar" aria-label="Account header">
         <div>
           <p className="eyebrow">White-label web wallet reference</p>
-          <h1>{customer.programName}</h1>
+          <h1>SandBank</h1>
           <p className="lede">
-            Demo customer account for bank, fintech, and payment product review.
-            All balances, addresses, approvals, and events are mock sandbox data.
+            Customer-facing digital-asset account reference app for account,
+            payment, balance, recipient, approval, and settlement flows.
           </p>
         </div>
         <div className="status-stack" aria-label="Reference status">
-          <span className="status-pill status-good">{customer.accountStatus}</span>
-          <span className="status-pill status-reference">Reference only</span>
+          <span className="status-pill status-good">{formatStatus(snapshot.customer.accountStatus)}</span>
+          <span className="status-pill status-reference">{dataModeLabel(dataMode)}</span>
         </div>
       </header>
 
       <section className="notice" aria-label="Public repository boundary">
-        <strong>No real funds, no real RPC, no seed phrases, no private keys.</strong>
-        This public demo shows account and payment flows only. Production custody,
-        signing, policy enforcement, risk logic, treasury, ledger, and deployments
-        remain private by design.
+        <strong>Public boundary: synthetic SandBank account data only.</strong>
+        This demo shows customer-facing account and payment UX. It does not include
+        production custody, real keys, real RPC, private policy or risk internals,
+        ledger internals, partner strategy, fundraising, M&amp;A, ADI, grant, or
+        strategic acquirer context.
       </section>
 
       <section className="dashboard-grid" aria-label="Wallet reference dashboard">
-        <AccountPanel balance={primaryBalance} />
-        <DepositPanel copied={copied} onCopy={copyDepositAddress} />
-        <PaymentPanel />
-        <ControlPlanePanel auditTrail={orderedAuditTrail} />
+        <AccountPanel customer={snapshot.customer} wallet={snapshot.wallet} balance={primaryBalance} />
+        <DepositPanel wallet={snapshot.wallet} copied={copied} onCopy={copyDepositAddress} />
+        <PaymentPanel policy={snapshot.policy} />
+        <ApprovalPanel policy={snapshot.policy} approvalNotes={orderedApprovalNotes} />
         <HistoryPanel transactions={orderedTransactions} />
         <EventsPanel events={orderedEvents} />
-        <SupportPanel />
-        <ArchitecturePanel />
+        <SupportPanel customer={snapshot.customer} />
+        <ArchitecturePanel dataMode={dataMode} />
       </section>
     </main>
   );
 }
 
-function AccountPanel({ balance }: { balance: AssetBalance }) {
+function AccountPanel({
+  customer,
+  wallet,
+  balance
+}: {
+  customer: DemoCustomer;
+  wallet: WalletState;
+  balance: AssetBalance;
+}) {
   return (
     <section className="panel panel-large" aria-labelledby="account-title">
       <div className="section-heading">
@@ -179,7 +239,7 @@ function AccountPanel({ balance }: { balance: AssetBalance }) {
           <p className="eyebrow">Account overview</p>
           <h2 id="account-title">{wallet.accountLabel}</h2>
         </div>
-        <span className="status-pill status-good">Open</span>
+        <span className="status-pill status-good">{formatStatus(customer.accountStatus)}</span>
       </div>
 
       <dl className="account-facts">
@@ -233,7 +293,15 @@ function AccountPanel({ balance }: { balance: AssetBalance }) {
   );
 }
 
-function DepositPanel({ copied, onCopy }: { copied: boolean; onCopy: () => void }) {
+function DepositPanel({
+  wallet,
+  copied,
+  onCopy
+}: {
+  wallet: WalletState;
+  copied: boolean;
+  onCopy: () => void;
+}) {
   const balance = wallet.balances[0];
 
   return (
@@ -246,8 +314,8 @@ function DepositPanel({ copied, onCopy }: { copied: boolean; onCopy: () => void 
         <span className="status-pill status-reference">Mock only</span>
       </div>
       <p className="muted">
-        Use this reference address to demonstrate deposit instructions in a
-        partner product. It is not connected to a live network.
+        This synthetic address demonstrates deposit instructions for the
+        SandBank account. It does not accept real funds.
       </p>
       <div className="reference-box">
         <span>{maskReference(wallet.depositAddress, 14, 6)}</span>
@@ -273,7 +341,7 @@ function DepositPanel({ copied, onCopy }: { copied: boolean; onCopy: () => void 
   );
 }
 
-function PaymentPanel() {
+function PaymentPanel({ policy }: { policy: PolicyState }) {
   const draft = policy.paymentDraft;
   const simulation = policy.simulation;
 
@@ -336,13 +404,19 @@ function PaymentPanel() {
   );
 }
 
-function ControlPlanePanel({ auditTrail }: { auditTrail: Array<AuditEvent & { createdAt: string }> }) {
+function ApprovalPanel({
+  policy,
+  approvalNotes
+}: {
+  policy: PolicyState;
+  approvalNotes: Array<ApprovalNote & { createdAt: string }>;
+}) {
   return (
-    <section className="panel" aria-labelledby="policy-title">
+    <section className="panel" aria-labelledby="approval-title">
       <div className="section-heading">
         <div>
-          <p className="eyebrow">Policy and approval</p>
-          <h2 id="policy-title">Control-plane state</h2>
+          <p className="eyebrow">Approval pending</p>
+          <h2 id="approval-title">Payment review state</h2>
         </div>
         <span className="status-pill status-warning">{formatStatus(policy.riskLevel)}</span>
       </div>
@@ -360,8 +434,8 @@ function ControlPlanePanel({ auditTrail }: { auditTrail: Array<AuditEvent & { cr
           <dd>{policy.approverRole}</dd>
         </div>
       </dl>
-      <ol className="timeline compact-timeline" aria-label="Audit trail">
-        {auditTrail.map((event) => (
+      <ol className="timeline compact-timeline" aria-label="Approval notes">
+        {approvalNotes.map((event) => (
           <li key={event.id}>
             <time>{formatDateTime(event.timestamp)}</time>
             <strong>{event.actor}</strong>
@@ -439,13 +513,13 @@ function EventsPanel({ events }: { events: WebhookEvent[] }) {
   );
 }
 
-function SupportPanel() {
+function SupportPanel({ customer }: { customer: DemoCustomer }) {
   return (
     <section className="panel" aria-labelledby="support-title">
       <div className="section-heading">
         <div>
           <p className="eyebrow">Support and recovery</p>
-          <h2 id="support-title">{customer.supportState}</h2>
+          <h2 id="support-title">{formatStatus(customer.supportState)}</h2>
         </div>
       </div>
       <p className="muted">{customer.supportSummary}</p>
@@ -463,7 +537,7 @@ function SupportPanel() {
   );
 }
 
-function ArchitecturePanel() {
+function ArchitecturePanel({ dataMode }: { dataMode: "mock" | "sandbox-api" | "sandbox-api-fallback" }) {
   return (
     <section className="panel architecture-panel" aria-labelledby="architecture-title">
       <div className="section-heading">
@@ -473,18 +547,30 @@ function ArchitecturePanel() {
         </div>
       </div>
       <p>
-        A partner backend would call En3 APIs and SDKs for wallet orchestration,
-        receive webhook events, and present policy, approval, simulation, and
-        audit states in its own customer experience.
+        SandBank can run this reference in mock mode or point it at a lightweight
+        sandbox API snapshot with EN3_API_BASE_URL. The public app only presents
+        account, recipient, payment, approval, settlement, and event states.
       </p>
       <ul className="architecture-list">
-        <li>Browser app: partner-branded account and payment experience.</li>
-        <li>Partner backend: authentication, customer mapping, and product rules.</li>
-        <li>En3 control plane: IAM/RBAC, approvals, simulation, events, and audit interfaces.</li>
-        <li>Private boundary: custody, signing, policy enforcement, ledger, treasury, and deployments.</li>
+        <li>Data mode: {dataModeLabel(dataMode)}.</li>
+        <li>Browser app: SandBank-branded account and payment experience.</li>
+        <li>Sandbox API: optional JSON snapshot for customer account review.</li>
+        <li>Private boundary: custody, signing, risk internals, ledger internals, and deployments.</li>
       </ul>
     </section>
   );
+}
+
+function dataModeLabel(mode: "mock" | "sandbox-api" | "sandbox-api-fallback"): string {
+  if (mode === "sandbox-api") {
+    return "Live sandbox API mode";
+  }
+
+  if (mode === "sandbox-api-fallback") {
+    return "Sandbox API fallback to mock mode";
+  }
+
+  return "Mock mode";
 }
 
 function statusTone(status: string): string {

@@ -1,50 +1,50 @@
 [
   {
-    "id": "txn_demo_004",
+    "id": "sandbank_txn_004",
     "direction": "outgoing",
     "asset": "USDC",
-    "amount": "12500.00",
-    "network": "Base Sepolia sandbox",
-    "status": "requires_approval",
-    "counterparty": "Lagos Partner Payouts",
+    "amount": "2750.00",
+    "network": "Sandbox payment network",
+    "status": "payment.approval_pending",
+    "counterparty": "River Market Supplies",
     "createdAt": "2026-05-25T12:00:00Z",
     "updatedAt": "2026-05-25T12:03:00Z",
-    "description": "Outgoing payment is waiting for sandbox operations approval."
+    "description": "Outgoing payment is waiting for SandBank approval in the synthetic reference flow."
   },
   {
-    "id": "txn_demo_003",
+    "id": "sandbank_txn_003",
     "direction": "incoming",
     "asset": "USDC",
-    "amount": "8000.00",
-    "network": "Base Sepolia sandbox",
-    "status": "settled",
+    "amount": "5000.00",
+    "network": "Sandbox payment network",
+    "status": "settlement.settled",
     "counterparty": "Sandbox deposit address",
     "createdAt": "2026-05-24T09:20:00Z",
     "updatedAt": "2026-05-24T09:26:00Z",
-    "description": "Mock deposit credited to the payment account."
+    "description": "Synthetic deposit credited to the SandBank account."
   },
   {
-    "id": "txn_demo_002",
+    "id": "sandbank_txn_002",
     "direction": "outgoing",
     "asset": "USDC",
-    "amount": "3200.00",
-    "network": "Base Sepolia sandbox",
-    "status": "settled",
-    "counterparty": "Demo merchant settlement",
+    "amount": "1420.25",
+    "network": "Sandbox payment network",
+    "status": "settlement.settled",
+    "counterparty": "North Pier Logistics",
     "createdAt": "2026-05-23T15:45:00Z",
     "updatedAt": "2026-05-23T16:05:00Z",
-    "description": "Mock merchant settlement completed in the reference timeline."
+    "description": "Synthetic supplier payment completed in the reference account history."
   },
   {
-    "id": "txn_demo_001",
+    "id": "sandbank_txn_001",
     "direction": "outgoing",
     "asset": "USDC",
-    "amount": "900.00",
-    "network": "Base Sepolia sandbox",
-    "status": "simulation_failed",
-    "counterparty": "Incomplete beneficiary profile",
+    "amount": "690.00",
+    "network": "Sandbox payment network",
+    "status": "simulation.declined",
+    "counterparty": "Incomplete recipient profile",
     "createdAt": "2026-05-22T11:30:00Z",
     "updatedAt": "2026-05-22T11:32:00Z",
-    "description": "Sandbox simulation stopped because beneficiary data was incomplete."
+    "description": "Synthetic simulation stopped because recipient information was incomplete."
   }
 ]

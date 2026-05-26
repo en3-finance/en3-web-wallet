@@ -1,10 +1,10 @@
 {
-  "id": "demo_user_001",
-  "name": "Amina Farouk",
-  "customerType": "SMB payout operator",
-  "programName": "North Harbor Pay",
-  "accountStatus": "Active sandbox account",
-  "supportState": "Recovery contact verified",
-  "supportSummary": "Support can review account access and payment status. No seed phrases, private keys, or custody operations are exposed in this public demo.",
-  "relationshipManager": "Demo Partner Success Team"
+  "id": "sandbank_customer_001",
+  "name": "Jordan Lee",
+  "customerType": "Business digital-asset account holder",
+  "programName": "SandBank Digital Asset Account",
+  "accountStatus": "account.open",
+  "supportState": "support.recovery_contact_verified",
+  "supportSummary": "SandBank support can review account access, recipient records, payment status, and recovery contact verification. No seed phrases, private keys, custody operations, or production controls are exposed in this public demo.",
+  "relationshipManager": "SandBank Customer Care"
 }

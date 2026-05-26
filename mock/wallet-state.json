@@ -1,19 +1,19 @@
 {
-  "userId": "demo_user_001",
-  "walletId": "wallet_demo_001",
-  "accountLabel": "North Harbor Pay - Operating Account",
-  "depositAddress": "en3_sandbox_deposit_usdc_001",
-  "depositNetwork": "Base Sepolia sandbox",
-  "approvalState": "transaction_requires_approval",
+  "userId": "sandbank_customer_001",
+  "walletId": "sandbank_account_sbx_001",
+  "accountLabel": "SandBank Operating Account",
+  "depositAddress": "sandbank_sandbox_deposit_usdc_001",
+  "depositNetwork": "Sandbox payment network",
+  "approvalState": "payment.approval_pending",
   "balances": [
     {
       "asset": "USDC",
-      "displayName": "USD Coin payment balance",
-      "network": "Base Sepolia sandbox",
-      "available": "25000.00",
-      "pending": "12500.00",
-      "settlement": "Mock settlement window: same business day",
-      "status": "reference_only"
+      "displayName": "USDC payment balance",
+      "network": "Sandbox payment network",
+      "available": "18420.75",
+      "pending": "2750.00",
+      "settlement": "Synthetic settlement estimate: same business day after approval",
+      "status": "balance.available"
     }
   ]
 }

@@ -10,18 +10,18 @@ import {
 
 describe("format helpers", () => {
   it("formats stablecoin amounts for account and balance sections", () => {
-    expect(formatCurrencyAmount("25000.00", "USDC")).toBe("25,000.00 USDC");
+    expect(formatCurrencyAmount("18420.75", "USDC")).toBe("18,420.75 USDC");
     expect(formatUsdEstimate("17.50")).toBe("$17.50");
   });
 
   it("formats simulation, approval, and transaction states for partner-readable labels", () => {
-    expect(formatStatus("transaction_requires_approval")).toBe("Transaction Requires Approval");
-    expect(formatStatus("sandbox-policy-review")).toBe("Sandbox Policy Review");
+    expect(formatStatus("payment.approval_pending")).toBe("Payment Approval Pending");
+    expect(formatStatus("settlement-review")).toBe("Settlement Review");
   });
 
   it("formats timestamps and masks long sandbox references", () => {
     expect(formatDateTime("2026-05-25T12:00:00Z")).toContain("UTC");
-    expect(maskReference("en3_sandbox_deposit_usdc_001", 8, 5)).toBe("en3_sand...c_001");
+    expect(maskReference("sandbank_sandbox_deposit_usdc_001", 8, 5)).toBe("sandbank...c_001");
   });
 
   it("orders transactions and events by newest timestamp", () => {

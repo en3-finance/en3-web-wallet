@@ -28,7 +28,7 @@ export function formatUsdEstimate(value: string): string {
 
 export function formatStatus(value: string): string {
   return value
-    .split(/[_-]/)
+    .split(/[_.-]/)
     .filter(Boolean)
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(" ");
